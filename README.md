@@ -1,5 +1,39 @@
 # Hello Everybody Love Everybody!
 
+## Development Instructions
+
+First clone the repo
+
+~~~sh
+git clone git@github.com:nko3/everybody-love-every.git
+~~~
+
+Next cd into the dir
+
+~~~sh
+cd everybody-love-every
+~~~
+
+To start the server run
+
+    npm start
+
+Open your browser at
+
+    http://localhost:3000
+
+Now you can start developing. Editing any of the source files should refresh the app in your browser automagically.
+
+## SocketStream Quick Start
+
+Client-side source code is in the `client` folder. The main `app.html` is in `client/views/app.html`. Javascripts are in `client/code/app`.
+
+Server-side source code is in the `server` folder. `server/rpc` is where you write services for the client side to consume, look at the `server/rpc/demo.js` as an example. To consume an rpc API, let's say it was the `sendMessage(text)` API in `demo.js`, you would do
+
+    ss.rpc('demo.sendMessage', text, function(itWorked){
+        // Success!!
+    });
+
 ## Deploy instructions
 
 ### GitHub — [Team][2], [Repo][3]
@@ -14,20 +48,6 @@ git clone git@github.com:nko3/everybody-love-every.git
 npm install -g jitsu
 jitsu login --username nko3-everybody-love-every --password Crf3C9GxqlrcDGG1
 jitsu deploy
-~~~
-
-## Tips
-
-### Vote KO Widget
-
-![Vote KO widget](http://f.cl.ly/items/1n3g0W0F0G3V0i0d0321/Screen%20Shot%202012-11-04%20at%2010.01.36%20AM.png)
-
-Use our "Vote KO" widget to let from your app directly. Here's the code for
-including it in your site:
-
-~~~html
-<iframe src="http://nodeknockout.com/iframe/everybody-love-every" frameborder=0 scrolling=no allowtransparency=true width=115 height=25>
-</iframe>
 ~~~
 
 ### Tutorials & Free Services
