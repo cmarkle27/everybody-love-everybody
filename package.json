@@ -1,19 +1,21 @@
 {
-  "name": "nko3-everybody-love-every",
-  "version": "0.0.0",
-  "description": "Everybody Love Everybody",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "name": "instaku",
+  "description": "An awesome real time application",
+  "version": "0.0.1",
+  "author": "Me <me@mydomain.com>",
+  "private": true,
+  "engines": { "node": ">= 0.8.0" },
   "repository": {
     "type": "git",
     "url": "git@github.com:nko3/everybody-love-every.git"
   },
-  "dependencies": {
+  "scripts": {
+    "start": "node app.js"
   },
-  "engines": {
-    "node": "0.8.x"
+  "dependencies": {
+    "socketstream": "0.3.x",
+    "ss-stylus": "0.1.x",
+    "ss-hogan": "0.1.x"
   },
   "subdomain": "everybody-love-every.nko3"
 }
