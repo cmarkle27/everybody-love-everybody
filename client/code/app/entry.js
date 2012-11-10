@@ -3,6 +3,8 @@
 // Make 'ss' available to all modules and the browser console
 window.ss = require('socketstream');
 
+require('/toby');
+
 ss.server.on('disconnect', function(){
   console.log('Connection down :-(');
 });
@@ -13,12 +15,5 @@ ss.server.on('reconnect', function(){
 
 ss.server.on('ready', function(){
 
-  // Wait for the DOM to finish loading
-  jQuery(function(){
-    
-    // Load app
-    require('/app');
-
-  });
-
 });
+

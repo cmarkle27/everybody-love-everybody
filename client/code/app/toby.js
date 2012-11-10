@@ -2,7 +2,6 @@
 
 * make the syllable indicators less noisy. maybe we don't need to show the count for every word
 * make the current syllable count for the current line visible somehow, that way they can plan
-* add in mandatory words
 * add in 2-player mode
 
 */
@@ -34,6 +33,9 @@ function capitalize(word){
     return word.substring(0, 1).toUpperCase() + word.substring(1)
 }
 
+function sameWord(one, other){
+    return one.toLowerCase() === other.toLowerCase()
+}
 
 /* ===========  AngularJS directives (which are sort of like extensions to the HTML elements) ======== */
 var app=angular.module('app', [])
@@ -64,6 +66,8 @@ app.directive('onKeyup', function(){
     }
 })
 
+app.controller('WordCtrl', ['$scope', WordCtrl])
+
 /* ============== The meat and potatoes: the controller for the UI ================= */
 function WordCtrl($scope){
     $scope.lines = [
@@ -75,10 +79,16 @@ function WordCtrl($scope){
     $scope.currSyllableCount = 0
     $scope.currSyllabelCountClass = 'good'
     $scope.message = ''
+    $scope.mandatoryWords = [
+        {text: 'princess'}
+        , {text: 'prince'}
+        , {text: 'king'}
+    ]
     $scope.currentLine = function(){
         return $scope.lines[$scope.currLine]
     }
-    $scope.addWord = function(){
+    $scope.countSyllablesInLine = countSyllablesInLine
+    $scope.enterPressed = function(){
         if ($scope.currLine >= $scope.lines.length){
             $scope.resetTextBox()
             return
@@ -92,6 +102,7 @@ function WordCtrl($scope){
             word = capitalize(word)
         }
         line.words.push({text: word, syllables: countSyllables(word)})
+        $scope.checkMandatoryWordsUsed(word)
         var totalSyllables = countSyllablesInLine(line)
         console.log('totalSyllables: ' + totalSyllables)
         if (totalSyllables === line.max){ // filled up this line
@@ -102,6 +113,13 @@ function WordCtrl($scope){
         }
         $scope.resetTextBox()
     }
+    $scope.checkMandatoryWordsUsed = function(word){
+        $scope.mandatoryWords.filter(function(mw){
+            if (sameWord(mw.text, word)){
+                mw.used = true
+            }
+        })
+    }
     $scope.resetTextBox = function(){
         $scope.newWordText = ''
     }
@@ -109,7 +127,6 @@ function WordCtrl($scope){
         $scope.message = 'Nice haiku!'
     }
     $scope.updateCurrentSyllableCount = function(){
-        console.log('updateCurrentSyllableCount')
         $scope.currSyllableCount = countSyllables($scope.newWordText)
         $scope.currSyllableCountClass = $scope.tooManySyllables() ? 'bad' : 'good'
     }
