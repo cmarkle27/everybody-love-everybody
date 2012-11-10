@@ -1,57 +1,138 @@
-/* QUICK CHAT DEMO */
+/* TODO
 
-// Delete this file once you've seen how the demo works
+* add in 2-player mode
+* workflow for starting a game
+* make the syllable indicators less noisy. maybe we don't need to show the count for every word
+* make the current syllable count for the current line visible somehow, that way they can plan
 
-// Listen out for newMessage events coming from the server
-ss.event.on('newMessage', function(message) {
+*/
 
-  // Example of using the Hogan Template in client/templates/chat/message.jade to generate HTML for each message
-  var html = ss.tmpl['chat-message'].render({
-    message: message,
-    time: function() { return timestamp(); }
-  });
+/* ===========  AngularJS directives (which are sort of like extensions to the HTML elements) ======== */
+var app=angular.module('app', [])
 
-  // Append it to the #chatlog div and show effect
-  return $(html).hide().appendTo('#chatlog').slideDown();
-});
-
-// Show the chat form and bind to the submit action
-$('#demo').on('submit', function() {
-
-  // Grab the message from the text box
-  var text = $('#myMessage').val();
-
-  // Call the 'send' funtion (below) to ensure it's valid before sending to the server
-  return exports.send(text, function(success) {
-    if (success) {
-      return $('#myMessage').val('');
-    } else {
-      return alert('Oops! Unable to send message');
+// the only-letters directive that forces all in put to be
+// letters only
+app.directive('onlyLetters', function(){
+    return function(scope, elm){
+        elm.bind('keypress', function(evt){
+            var code = evt.keyCode
+            if ((code >= 65 && code <= 90) ||
+                (code >= 97 && code <= 122) ||
+                code === 13){
+                // ok
+            }else{
+                evt.preventDefault()
+            }
+        })
     }
-  });
-});
+})
 
-// Demonstrates sharing code between modules by exporting function
-exports.send = function(text, cb) {
-  if (valid(text)) {
-    return ss.rpc('demo.sendMessage', text, cb);
-  } else {
-    return cb(false);
-  }
-};
+// what to do after a key press
+app.directive('onKeyup', function(){
+    return function(scope, elm, attrs){
+        elm.bind('keyup', function(evt){
+            scope.$apply(attrs.onKeyup)
+        })
+    }
+})
 
-console.log('app')
-// Private functions
+/* ============== The meat and potatoes: the controller for the UI ================= */
+app.controller('WordCtrl', ['$scope', WordCtrl])
+var makeGame = require('./game')
+var wordutils = require('./wordutils')
 
-var timestamp = function() {
-  var d = new Date();
-  return d.getHours() + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
-};
+function WordCtrl($scope){
+    $scope.game = makeGame()
+    $scope.currSyllableCount = 0
+    $scope.currSyllabelCountClass = 'good'
+    $scope.message = ''
+    $scope.mandatoryWords = [
+        {text: 'princess'}
+        , {text: 'prince'}
+        , {text: 'king'}
+    ]
 
-var pad2 = function(number) {
-  return (number < 10 ? '0' : '') + number;
-};
+    $scope.instaImg = $("#imageKu");
+    $scope.grams = [];
+    $scope.imgSrc = '';
 
-var valid = function(text) {
-  return text && text.length > 0;
-};
+    $scope.updateImgSrc = function(i){
+
+        console.log( $scope.grams[ i ].url );
+
+        $( $scope.instaImg ).attr("src", $scope.grams[ i ].url).show();
+
+        //$( $scope.instaImg ).show();
+    }
+
+    $scope.processGrams = function( instas ){
+        // save the grams
+        $scope.grams = [];
+        for (var i = 0, len = instas.length ; i < len; i++) {
+            $scope.grams.push( instas[ i ].images.standard_resolution );
+        };
+        $scope.updateImgSrc(0);
+    }
+
+    $scope.instagram = new INSTAGRAM( { 
+        onComplete: $scope.processGrams, 
+        clientId: '82800ae3936348649c2c922d144cfe53', 
+        limit: 16 
+    });
+    $scope.instagram.getImages();
+
+    $scope.currentLine = function(){
+        return $scope.game.currentLine()
+    }
+    $scope.enterPressed = function(){
+        if ($scope.game.ended()){
+            $scope.resetTextBox()
+            return
+        }
+        if ($scope.tooManySyllables()){
+            return
+        }
+        var word = $scope.newWordText || ""
+        var syllablesInWord = wordutils.countSyllables(word)
+        if (syllablesInWord === 0) return
+        
+        $scope.game.playWord(word)
+        $scope.checkMandatoryWordsUsed(word)
+        if ($scope.game.ended()){
+            $scope.endGame()
+        }
+        $scope.resetTextBox()
+    }
+
+    $scope.checkMandatoryWordsUsed = function(word){
+        $scope.mandatoryWords.filter(function(mw){
+            if (wordutils.sameWord(mw.text, word)){
+                mw.used = true
+            }
+        })
+        $scope.allMandatoryWordsUsed = $scope.mandatoryWords.every(function(mw){
+            return mw.used
+        })
+    }
+    $scope.resetTextBox = function(){
+        $scope.newWordText = ''
+    }
+    $scope.setMessage = function(level, message){
+        $scope.message = message
+        $scope.messageLevel = level
+    }
+    $scope.endGame = function(){
+        if (!$scope.allMandatoryWordsUsed){
+            $scope.setMessage('error', "Sorry, you didn't use all the required words")
+        }else{
+            $scope.setMessage('info', 'Nice haiku!')
+        }
+    }
+    $scope.updateCurrentSyllableCount = function(){
+        $scope.currSyllableCount = wordutils.countSyllables($scope.newWordText)
+        $scope.currSyllableCountClass = $scope.tooManySyllables() ? 'bad' : 'good'
+    }
+    $scope.tooManySyllables = function(){
+        return !$scope.game.canFitWord($scope.newWordText || '')
+    }
+}
