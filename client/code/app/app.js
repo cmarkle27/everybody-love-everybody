@@ -36,6 +36,7 @@ app.directive('onKeyup', function(){
     }
 })
 
+
 /* ============== The meat and potatoes: the controller for the UI ================= */
 app.controller('WordCtrl', ['$scope', WordCtrl])
 var makeGame = require('./game')
@@ -56,18 +57,31 @@ function WordCtrl($scope){
     $scope.grams = [];
     $scope.imgSrc = '';
 
+    $scope.updateImg = function(i){
+        $scope.updateImgSrc(i);
+        $scope.updateImgWords(i);
+    }
+
     $scope.updateImgSrc = function(i){
         // jquery update of imgsrc
-        $( $scope.instaImg ).attr("src", $scope.grams[ i ].url).show();
+        $( $scope.instaImg ).attr("src", $scope.grams[ i ].images.standard_resolution.url).show();
+    }
+
+    $scope.updateImgWords = function(i){
+        wordutils.keywords( $scope.grams[ i ] );
     }
 
     $scope.processGrams = function( instas ){
         // save the grams
-        $scope.grams = [];
+        $scope.grams = instas;
+
+        /*
         for (var i = 0, len = instas.length ; i < len; i++) {
             $scope.grams.push( instas[ i ].images.standard_resolution );
         };
-        $scope.updateImgSrc(0);
+        */
+
+        $scope.updateImg(0);
     }
 
     $scope.instagram = new INSTAGRAM( { 

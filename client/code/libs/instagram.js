@@ -6,8 +6,6 @@
  * http://potomak.github.com/jquery-instagram/
  */
 
-//https://api.instagram.com/v1/media/popular?client_id=82800ae3936348649c2c922d144cfe53 
-
 var INSTAGRAM = function( options ) {
   
   // private variables and functions
@@ -93,6 +91,8 @@ var INSTAGRAM = function( options ) {
         else {
           grams.push( res.data[i] );
         }
+
+        console.log(grams);
 
         settings.onComplete != null && typeof settings.onComplete == 'function' && settings.onComplete(grams, res);
 
