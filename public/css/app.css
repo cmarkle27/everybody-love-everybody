@@ -1,0 +1,45 @@
+body {
+  padding: 10px;
+}
+#ui {
+  font-size: 25px;
+}
+sup {
+  color: #777;
+  cursor: default;
+}
+sup.good {
+  color: #008000;
+}
+sup.bad {
+  color: #f00;
+}
+#message {
+  color: #fff;
+}
+#message.error {
+  background-color: #f00;
+}
+#message.info {
+  background-color: #008000;
+}
+#single-player-instructions label {
+  color: #888;
+}
+ul#mandatory-words {
+  padding: 0;
+  list-style: none;
+  display: inline;
+}
+ul#mandatory-words li {
+  display: inline;
+  margin-right: 0.5em;
+  color: #444;
+  font-weight: bold;
+}
+ul#mandatory-words li.used {
+  color: #008000;
+}
+ul#mandatory-words li.unused {
+  color: #f00;
+}

@@ -1,0 +1,5 @@
+#! /bin/bash
+
+node_modules/.bin/stylus public/css/*.styl
+node_modules/.bin/browserify public/js/app.js -o public/js/bundle.js
+echo "Compiled public/js/bundle.js"
