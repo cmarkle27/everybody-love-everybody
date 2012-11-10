@@ -33,7 +33,7 @@ function uncommon( sentence ){
 
     // a, an, by, to, me, he, we, it, i, to, of, be, is
     var wordArr = sentence.match(/[a-zA-z0-9@]+/g),
-        common = 'the, all, but, ago, tha, with, can, thats, you, your, have, ago, was, what, let, that, she, they, how, are, for, this, and',
+        common = 'the, all, but, ago, tha, with, can, lol, nigga, haha, com, thats, you, your, have, ago, was, what, let, that, she, they, how, are, for, this, and',
         commonObj = {},
         uncommonArr = [],
         word, i;
@@ -108,7 +108,7 @@ function keywords( img ){
     str = words.join(' ').replace(exp,''); 
     str = str.replace(/ +/g, ' ');
 
-    //console.log( str );
+    console.log( str );
 
     // remove common words
     return uncommon( str );

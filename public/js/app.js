@@ -68,10 +68,22 @@ function WordCtrl($scope){
     }
 
     $scope.updateImgWords = function(i){
-        var keywords = wordutils.keywords( $scope.grams[ i ] );
-        // get most freq keywords
-        console.log( keywords );
-        console.log( wordutils.frequent( keywords ) );
+
+        var keywords = wordutils.keywords( $scope.grams[ i ] ),
+            freq = wordutils.frequent( keywords ),
+            first, second, third;
+
+        first = freq.shift();
+        third = freq.shift();
+        second = freq[ Math.floor( Math.random()*freq.length ) ];
+
+        $scope.mandatoryWords = [
+            { text: first[ 'key' ] }
+            , {text: second[ 'key' ] }
+            , {text: third[ 'key' ] }
+        ]
+    
+        $scope.$apply();
         
     }
 
