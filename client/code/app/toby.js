@@ -98,13 +98,9 @@ function WordCtrl($scope){
         }
         var word = $scope.newWordText
         var line = $scope.currentLine()
-        if (line.words.length === 0){
-            word = capitalize(word)
-        }
         line.words.push({text: word, syllables: countSyllables(word)})
         $scope.checkMandatoryWordsUsed(word)
         var totalSyllables = countSyllablesInLine(line)
-        console.log('totalSyllables: ' + totalSyllables)
         if (totalSyllables === line.max){ // filled up this line
             $scope.currLine ++
             if ($scope.currLine >= $scope.lines.length){
@@ -119,12 +115,23 @@ function WordCtrl($scope){
                 mw.used = true
             }
         })
+        $scope.allMandatoryWordsUsed = $scope.mandatoryWords.every(function(mw){
+            return mw.used
+        })
     }
     $scope.resetTextBox = function(){
         $scope.newWordText = ''
     }
+    $scope.setMessage = function(level, message){
+        $scope.message = message
+        $scope.messageLevel = level
+    }
     $scope.endGame = function(){
-        $scope.message = 'Nice haiku!'
+        if (!$scope.allMandatoryWordsUsed){
+            $scope.setMessage('error', "Sorry, you didn't use all the required words")
+        }else{
+            $scope.setMessage('info', 'Nice haiku!')
+        }
     }
     $scope.updateCurrentSyllableCount = function(){
         $scope.currSyllableCount = countSyllables($scope.newWordText)
