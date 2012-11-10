@@ -1,4 +1,4 @@
-# Hello Everybody Love Everybody!
+# Team: Everybody Love Everybody!
 
 ## Development Instructions
 
