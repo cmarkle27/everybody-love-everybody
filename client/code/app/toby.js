@@ -140,8 +140,9 @@ function WordCtrl($scope){
             return
         }
         var line = $scope.currentLine()
-
         line.words.push({text: word, syllables: syllablesInWord})
+        line.words.push({text: word, syllables: countSyllables(word)})
+        ss.rpc('game.playWord', word, 'toby')
         $scope.checkMandatoryWordsUsed(word)
         var totalSyllables = countSyllablesInLine(line)
         if (totalSyllables === line.max){ // filled up this line
