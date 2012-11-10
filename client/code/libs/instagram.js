@@ -73,8 +73,6 @@ var INSTAGRAM = function( options ) {
 
   makeRequest = function() {
 
-    console.log( composeRequestURL() );
-    
     $.ajax({
       type: "GET",
       dataType: "jsonp",
@@ -95,8 +93,6 @@ var INSTAGRAM = function( options ) {
         else {
           grams.push( res.data[i] );
         }
-
-        console.log( grams );
 
         settings.onComplete != null && typeof settings.onComplete == 'function' && settings.onComplete(grams, res);
 
