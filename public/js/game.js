@@ -15,9 +15,11 @@ function augment(obj, properties){
     }
 }
 
-function createGame(options){
+function createGame(props){
 
     var game = {}
+
+    augment(game, props)
 
     game.currIndex = 0
     

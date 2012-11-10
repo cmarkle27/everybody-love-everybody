@@ -2,7 +2,8 @@ var express = require('express')
 var path = require('path')
 var stylus = require('stylus')
 var app = express()
-
+var build = require('./lib/build')
+build()
 
 app.configure(function(){
     app.use(app.router)

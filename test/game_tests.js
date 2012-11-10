@@ -1,6 +1,6 @@
-var createGame = require('../app/game')
+var createGame = require('../public/js/game')
 var expect = require('chai').expect
-var wordutils = require('../app/wordutils')
+var wordutils = require('../public/js/wordutils')
 
 function makeWord(word){
     return {text: word, syllables: wordutils.countSyllables(word)}

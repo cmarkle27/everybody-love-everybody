@@ -408,9 +408,11 @@ function augment(obj, properties){
     }
 }
 
-function createGame(options){
+function createGame(props){
 
     var game = {}
+
+    augment(game, props)
 
     game.currIndex = 0
     
@@ -493,8 +495,8 @@ exports.uncommon = uncommon
 function uncommon( sentence ){
 
     // a, an, by, to, me, he, we, it, i, to, of, be, is
-    var wordArr = sentence.match(/\w+/g),
-        common = 'the, all, you, she, they, how, are, for, this, and',
+    var wordArr = sentence.match(/[a-zA-z0-9@]+/g),
+        common = 'the, all, but, ago, tha, with, can, thats, you, your, have, ago, was, what, let, that, she, they, how, are, for, this, and',
         commonObj = {},
         uncommonArr = [],
         word, i;
@@ -507,11 +509,14 @@ function uncommon( sentence ){
     for ( i = 0; i < wordArr.length; i++ ) {
 
         word = wordArr[i].trim().toLowerCase();
+
         // words must be greater than 2 chars, not in our common list of words
-        // and not be only digits
+        // and not be only digits, ignore @crap, ignore www stuff
         if ( word.length > 2 
                 && !commonObj[word] 
-                && ! /^\d+$/.test(word) ) {
+                && ! /^\d+$/.test(word)
+                && word.indexOf('@') !== 0
+                && word.indexOf('www') !== 0 ) {
             uncommonArr.push(word);
         }
     }
@@ -519,10 +524,35 @@ function uncommon( sentence ){
     return uncommonArr;
 }
 
+function sortObject(obj) {
+    var arr = [];
+    for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            arr.push({
+                'key': prop,
+                'value': obj[prop]
+            });
+        }
+    }
+    arr.sort(function(a, b) { return b.value - a.value; });
+    return arr; // returns array
+}
+
+exports.frequent = frequent
+function frequent( words ){
+
+    var wordCounts = { };
+    //var words = str.split(/\b/);
+
+    for(var i = 0; i < words.length; i++){
+        wordCounts[ words[i] ] = ( wordCounts[ words[i] ] || 0 ) + 1;
+    }
+
+    return sortObject( wordCounts );
+}
+
 exports.keywords = keywords
 function keywords( img ){
-
-    console.log( img );
 
     var str = '' 
         words = img.tags || [],
@@ -541,12 +571,12 @@ function keywords( img ){
     str = words.join(' ').replace(exp,''); 
     str = str.replace(/ +/g, ' ');
 
-    console.log( str );
+    //console.log( str );
 
     // remove common words
-    keywords = uncommon( str );
+    return uncommon( str );
 
-    console.log( keywords.join(' ') );
+    //console.log( keywords.join(' ') );
     
 }
 });
@@ -621,7 +651,11 @@ function WordCtrl($scope){
     }
 
     $scope.updateImgWords = function(i){
-        wordutils.keywords( $scope.grams[ i ] );
+        var keywords = wordutils.keywords( $scope.grams[ i ] );
+        // get most freq keywords
+        console.log( keywords );
+        console.log( wordutils.frequent( keywords ) );
+        
     }
 
     $scope.processGrams = function( instas ){
