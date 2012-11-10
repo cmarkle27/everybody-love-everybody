@@ -34,8 +34,6 @@ ss.client.formatters.add(require('ss-stylus'));
 // Use server-side compiled Hogan (Mustache) templates. Others engines available
 ss.client.templateEngine.use(require('ss-hogan'));
 
-ss.responders.add(require('ss-angular'));
-
 // Minimize and pack assets if you type: SS_ENV=production node app.js
 if (ss.env === 'production') ss.client.packAssets();
 

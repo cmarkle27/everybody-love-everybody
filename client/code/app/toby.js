@@ -1,8 +1,9 @@
 /* TODO
 
+* add in 2-player mode
+* workflow for starting a game
 * make the syllable indicators less noisy. maybe we don't need to show the count for every word
 * make the current syllable count for the current line visible somehow, that way they can plan
-* add in 2-player mode
 
 */
 
@@ -66,9 +67,9 @@ app.directive('onKeyup', function(){
     }
 })
 
+/* ============== The meat and potatoes: the controller for the UI ================= */
 app.controller('WordCtrl', ['$scope', WordCtrl])
 
-/* ============== The meat and potatoes: the controller for the UI ================= */
 function WordCtrl($scope){
     $scope.lines = [
         {max: 5, words: []}
