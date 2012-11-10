@@ -38,6 +38,10 @@ function sameWord(one, other){
     return one.toLowerCase() === other.toLowerCase()
 }
 
+
+
+
+
 /* ===========  AngularJS directives (which are sort of like extensions to the HTML elements) ======== */
 var app=angular.module('app', [])
 
@@ -71,6 +75,8 @@ app.directive('onKeyup', function(){
 app.controller('WordCtrl', ['$scope', WordCtrl])
 
 function WordCtrl($scope){
+    //window.$scope = $scope
+
     $scope.lines = [
         {max: 5, words: []}
         , {max: 7, words: []}
@@ -85,9 +91,40 @@ function WordCtrl($scope){
         , {text: 'prince'}
         , {text: 'king'}
     ]
+
+    $scope.instaImg = $("#imageKu");
+    $scope.grams = [];
+    $scope.imgSrc = '';
+
+    $scope.updateImgSrc = function(i){
+
+        console.log( $scope.grams[ i ].url );
+
+        $( $scope.instaImg ).attr("src", $scope.grams[ i ].url).show();
+
+        //$( $scope.instaImg ).show();
+    }
+
+    $scope.processGrams = function( instas ){
+        // save the grams
+        $scope.grams = [];
+        for (var i = 0, len = instas.length ; i < len; i++) {
+            $scope.grams.push( instas[ i ].images.standard_resolution );
+        };
+        $scope.updateImgSrc(0);
+    }
+
+    $scope.instagram = new INSTAGRAM( { 
+        onComplete: $scope.processGrams, 
+        clientId: '82800ae3936348649c2c922d144cfe53', 
+        limit: 16 
+    });
+    $scope.instagram.getImages();
+
     $scope.currentLine = function(){
         return $scope.lines[$scope.currLine]
     }
+
     $scope.countSyllablesInLine = countSyllablesInLine
     $scope.enterPressed = function(){
         if ($scope.currLine >= $scope.lines.length){
