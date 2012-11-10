@@ -9,10 +9,18 @@ function countSyllablesInLine(line){
     return sum
 }
 
-function createGame(){
+function augment(obj, properties){
+    for (var key in properties){
+        obj[key] = properties[key]
+    }
+}
+
+function createGame(options){
 
     var game = {}
+
     game.currIndex = 0
+    
     game.lines = [
         {max: 5, words: []}
         , {max: 7, words: []}
@@ -43,8 +51,13 @@ function createGame(){
 
     game.canFitWord = function(word){
         var currLine = game.currentLine()
+        if (!currLine) return false
         return countSyllablesInLine(game.currentLine()) + 
             wordutils.countSyllables(word) <= currLine.max
+    }
+
+    game.allMandatoryWordsUsed = function(){
+        return false
     }
 
     return game

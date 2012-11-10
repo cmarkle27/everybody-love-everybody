@@ -6,6 +6,14 @@ function makeWord(word){
     return {text: word, syllables: wordutils.countSyllables(word)}
 }
 
+var haiku = 'once upon a time \
+there was a person some where \
+here are more words here'
+
+var princessHaiku = 'once upon a time \
+there was a princeess and she \
+had a prince and king'
+
 describe('game', function(){
     var game
     beforeEach(function(){
@@ -40,9 +48,6 @@ describe('game', function(){
     })
     it('checks game has ended', function(){
         expect(game.ended()).to.equal(false)
-        var haiku = 'once upon a time \
-there was a person some where \
-here are more words here'
         haiku.split(' ').forEach(function(word){
             game.playWord(word)
         })
@@ -56,5 +61,27 @@ here are more words here'
         expect(game.canFitWord('time')).to.be.ok
         expect(game.canFitWord('elephant')).not.to.be.ok
     })
+    it('should not bomb if calling canFitWord after game ended', function(){
+        haiku.split(' ').forEach(function(word){
+            game.playWord(word)
+        })
+        game.canFitWord('bobby')
+    })
+})
 
+describe('mandatory words', function(){
+    var game
+    beforeEach(function(){
+        game = createGame({
+            mandatoryWords: ['princess', 'prince', 'king']
+        })
+    })
+    it('tells whether all mandatory words are used', function(){
+        expect(game.allMandatoryWordsUsed()).not.to.be.ok
+        princessHaiku.split(' ').forEach(function(word){
+            game.playWord(word)
+        })
+        expect(game.allMandatoryWordsUsed()).to.be.ok
+        
+    })
 })
