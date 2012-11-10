@@ -68,7 +68,11 @@ function WordCtrl($scope){
     }
 
     $scope.updateImgWords = function(i){
-        wordutils.keywords( $scope.grams[ i ] );
+        var keywords = wordutils.keywords( $scope.grams[ i ] );
+        // get most freq keywords
+        console.log( keywords );
+        console.log( wordutils.frequent( keywords ) );
+        
     }
 
     $scope.processGrams = function( instas ){
