@@ -1,10 +1,38 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="app">
   <head>
     <meta charset="utf-8"/>
     <SocketStream/>
     <title>Toby's Prototype</title>
     <script>
+
+    var app=angular.module('app', []);
+
+    app.directive('noSpace', function(){
+        return function(scope, elm){
+            elm.bind('keypress', function(evt){
+                if (evt.keyCode === 32){
+                    evt.preventDefault()
+                }
+            })
+        }
+    })
+
+    app.directive('onlyLetters', function(){
+        return function(scope, elm){
+            elm.bind('keypress', function(evt){
+                var code = evt.keyCode
+                if ((code >= 65 && code <= 90) || 
+                    (code >= 97 && code <= 122) || 
+                    code === 13){
+                    // ok
+                }else{
+                    evt.preventDefault()
+                }
+            })
+        }
+    })
+
     function WordCtrl($scope){
         $scope.words = []
         $scope.addWord = function(){
@@ -19,7 +47,7 @@
     <h1>Toby's Prototype</h1>
     <div id="ui" ng-controller="WordCtrl">
         <form ng-submit="addWord()">
-            <input type="text" ng-model="newWordText" placeholder="Type your word here">
+            <input only-letters type="text" ng-model="newWordText" placeholder="Type your word here">
         </form>
         <p>
             <span ng-repeat="word in words">{{word.text}} </span>
