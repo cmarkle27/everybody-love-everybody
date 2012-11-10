@@ -1,0 +1,13 @@
+{
+    "src_files": [
+        "client/code/app/*.js",
+        "client/code/test/*.js"
+    ],
+    "launchers": {
+        "Mocha": {
+            "command": "mocha client/code/test/*_tests.js"
+        }
+    },
+    "launch_in_dev": ["Mocha"],
+    "launch_in_ci": ["Mocha"]
+}

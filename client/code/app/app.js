@@ -40,7 +40,7 @@ exports.send = function(text, cb) {
   }
 };
 
-
+console.log('app')
 // Private functions
 
 var timestamp = function() {

@@ -20,7 +20,7 @@
             <sup class="{{currSyllableCountClass}}">{{currSyllableCount}}</sup>
         </form>
         <p id="haiku">
-            <span ng-repeat="line in lines">
+            <span ng-repeat="line in game.lines">
                 <span ng-repeat="word in line.words">{{word.text}}<sup title="{{word.syllables}} syllables">{{word.syllables}}</sup> </span>
                 <br>
             </span>
