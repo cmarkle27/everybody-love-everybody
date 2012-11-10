@@ -1,3 +1,12 @@
+/* TODO
+
+* make the syllable indicators less noisy. maybe we don't need to show the count for every word
+* make the current syllable count for the current line visible somehow, that way they can plan
+* add in mandatory words
+* add in 2-player mode
+
+*/
+
 /* ================ Just some helper functions ==================== */
 // <http://stackoverflow.com/questions/5686483/how-to-compute-number-of-syllables-in-a-word-in-javascript>
 function countSyllables(word) {
