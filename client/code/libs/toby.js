@@ -7,8 +7,20 @@ function countSyllables(word) {
   return word.match(/[aeiouy]{1,2}/g).length;                    //word.scan(/[aeiouy]{1,2}/).size
 }
 
+function sumSyllablesInLine(line){
+    var words = line.words
+    var sum = 0
+    for (var i = 0; i < words.length; i++){
+        sum += words[i].syllables       
+    }
+    return sum
+}
+
 var app=angular.module('app', []);
 
+
+// the only-letters directive that forces all in put to be
+// letters only
 app.directive('onlyLetters', function(){
     return function(scope, elm){
         elm.bind('keypress', function(evt){
@@ -25,11 +37,23 @@ app.directive('onlyLetters', function(){
 })
 
 function WordCtrl($scope){
-    $scope.words = []
+    $scope.lines = [
+        {max: 5, words: []}
+        , {max: 7, words: []}
+        , {max: 5, words: []}
+    ] // 3 lines
+    $scope.currLine = 0
     $scope.addWord = function(){
+        if ($scope.currLine >= $scope.lines.length) return
+        console.log('currLine ' + $scope.currLine)
         var word = $scope.newWordText
-        $scope.words.push({text: word, syllables: countSyllables(word)})
+        var line = $scope.lines[$scope.currLine]
+        line.words.push({text: word, syllables: countSyllables(word)})
+        var totalSyllables = sumSyllablesInLine(line)
+        console.log('totalSyllables: ' + totalSyllables)
+        if (totalSyllables >= line.max){
+            $scope.currLine ++
+        }
         $scope.newWordText = ''
-        console.log('added word')
     }
 }

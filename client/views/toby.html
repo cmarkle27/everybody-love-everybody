@@ -12,7 +12,10 @@
             <input only-letters type="text" ng-model="newWordText" placeholder="Type your word here">
         </form>
         <p>
-            <span ng-repeat="word in words">{{word.text}}<sup title="{{word.syllables}} syllables">{{word.syllables}}</sup> </span>
+            <span ng-repeat="line in lines">
+                <span ng-repeat="word in line.words">{{word.text}}<sup title="{{word.syllables}} syllables">{{word.syllables}}</sup> </span>
+                <br>
+            </span>
         </p>
     </div>
   </body>
