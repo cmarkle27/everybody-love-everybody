@@ -24,7 +24,7 @@ function countSyllablesInLine(line){
     var words = line.words
     var sum = 0
     for (var i = 0; i < words.length; i++){
-        sum += words[i].syllables       
+        sum += words[i].syllables
     }
     return sum
 }
@@ -47,8 +47,8 @@ app.directive('onlyLetters', function(){
     return function(scope, elm){
         elm.bind('keypress', function(evt){
             var code = evt.keyCode
-            if ((code >= 65 && code <= 90) || 
-                (code >= 97 && code <= 122) || 
+            if ((code >= 65 && code <= 90) ||
+                (code >= 97 && code <= 122) ||
                 code === 13){
                 // ok
             }else{
@@ -97,9 +97,14 @@ function WordCtrl($scope){
         if ($scope.tooManySyllables()){
             return
         }
-        var word = $scope.newWordText
+        var word = $scope.newWordText || ""
+        var syllablesInWord = countSyllables(word)
+        if (syllablesInWord === 0){
+            return
+        }
         var line = $scope.currentLine()
-        line.words.push({text: word, syllables: countSyllables(word)})
+
+        line.words.push({text: word, syllables: syllablesInWord})
         $scope.checkMandatoryWordsUsed(word)
         var totalSyllables = countSyllablesInLine(line)
         if (totalSyllables === line.max){ // filled up this line
@@ -110,6 +115,7 @@ function WordCtrl($scope){
         }
         $scope.resetTextBox()
     }
+
     $scope.checkMandatoryWordsUsed = function(word){
         $scope.mandatoryWords.filter(function(mw){
             if (sameWord(mw.text, word)){
@@ -135,6 +141,7 @@ function WordCtrl($scope){
         }
     }
     $scope.updateCurrentSyllableCount = function(){
+
         $scope.currSyllableCount = countSyllables($scope.newWordText)
         $scope.currSyllableCountClass = $scope.tooManySyllables() ? 'bad' : 'good'
     }
