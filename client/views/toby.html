@@ -1,0 +1,29 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <meta charset="utf-8"/>
+    <SocketStream/>
+    <title>Toby's Prototype</title>
+    <script>
+    function WordCtrl($scope){
+        $scope.words = []
+        $scope.addWord = function(){
+            $scope.words.push({text: $scope.newWordText})
+            $scope.newWordText = ''
+            console.log('added word')
+        }
+    }
+    </script>
+  </head>
+  <body>
+    <h1>Toby's Prototype</h1>
+    <div id="ui" ng-controller="WordCtrl">
+        <form ng-submit="addWord()">
+            <input type="text" ng-model="newWordText" placeholder="Type your word here">
+        </form>
+        <p>
+            <span ng-repeat="word in words">{{word.text}} </span>
+        </p>
+    </div>
+  </body>
+</html>
