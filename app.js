@@ -14,7 +14,7 @@ ss.client.define('main', {
 ss.client.define('toby', {
   view: 'toby.html',
   css:  ['libs/normalize.css', 'toby.styl'],
-  code: ['libs/jquery.min.js', 'libs/angular.min.js', 'app'],
+  code: ['libs/jquery.min.js', 'libs/angular.min.js', 'libs/toby.js', 'app'],
   tmpl: '*'
 });
 
