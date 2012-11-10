@@ -14,6 +14,10 @@ Next cd into the dir
 cd everybody-love-every
 ~~~
 
+Install the dependencies
+
+    npm install
+
 To start the server run
 
     npm start
