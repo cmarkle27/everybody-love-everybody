@@ -1,18 +1,28 @@
 <div id="ui" ng-controller="TwoPlayerGameCtrl">
-    <div id="two-player-instructions">
-        <p ng-show="myTurn">{{playerName}}, it's your turn:</p>
-    </div>
-    <form ng-submit="enterPressed()">
-        <input ng-disabled="inputDisabled" on-keyup="updateCurrentSyllableCount()" only-letters type="text" ng-model="newWordText" placeholder="Type a word then hit ENTER">
-        <sup class="{{currSyllableCountClass}}">{{currSyllableCount}}</sup>
-    </form>
-    <p id="haiku">
-        <span ng-repeat="line in game.lines">
-            <span ng-repeat="word in line.words">{{word.text}} </span>
-            <br>
-        </span>
-    </p>
-    <p id="message" class="{{messageLevel}}">{{message}}</p>
+    <div ng-show="gameStarted">
+        <div id="two-player-instructions">
+            <h2 ng-show="opponent">
+                <span class="player{{whichAmI}}">{{playerName}}</span> 
+                    vs 
+                <span class="player{{whichAreThey}}">{{opponent}}</span>
+            </h2>
+            <p ng-show="myTurn" class="player{{whichAmI}}">{{playerName}}, it's your turn:</p>
+        </div>
+        <form ng-submit="enterPressed()">
+            <input ng-disabled="inputDisabled" on-keyup="updateCurrentSyllableCount()" only-letters type="text" ng-model="newWordText" placeholder="Type a word then hit ENTER">
+            <sup class="{{currSyllableCountClass}}">{{currSyllableCount}}</sup>
+        </form>
+        <p id="haiku">
+            <span ng-repeat="line in game.lines">
+                <span ng-repeat="word in line.words" class="player{{word.which}}-word">{{word.text}} </span>
+                <br>
+            </span>
+        </p>
+        <p id="message" class="{{messageLevel}}">{{message}}</p>
 
-    <img id="imageKu" src="{{imageSrc}}" width="300px" height="300px" />
+        <img id="imageKu" ng-src="{{imageSrc}}" width="300px" height="300px" />
+    </div>
+    <div ng-hide="gameStarted">
+        <p>Waiting for another player...</p>
+    </div>
 </div>

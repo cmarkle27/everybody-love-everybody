@@ -68,3 +68,11 @@ ul#mandatory-words li.used {
 ul#mandatory-words li.unused {
   color: #f00;
 }
+.player1,
+.player1-word {
+  color: #f00;
+}
+.player2,
+.player2-word {
+  color: #008000;
+}
