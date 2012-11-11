@@ -1,9 +1,10 @@
 <!doctype html>
 <html ng-app="app">
   <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Instaku</title>
-    <link href="css/normalize.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
     <script src="js/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -14,7 +15,22 @@
     <script src="js/app.js"></script>
   </head>
   <body>
-    <h1><a href="/">Instaku</a></h1>
-    <div ng-view></div>
+
+    <div class="player-count"><span>11</span> players connected</div>
+
+
+    <div class="row">
+        <div class="span6 header">
+            <h1 class="logotype"><a href="/">Instaku</a></h1>
+            <p class="instructions">
+                Observe a picture, <br>
+                write a haiku on your own, <br>
+                or with another.
+            </p>
+        </div>
+        <div class="span6 main">
+            <div ng-view></div>
+        </div>
+    </div>
   </body>
 </html>
