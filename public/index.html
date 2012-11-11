@@ -2,7 +2,6 @@
 <html ng-app="app">
   <head>
     <meta charset="utf-8"/>
-    <SocketStream/>
     <title>Instaku</title>
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
@@ -13,26 +12,12 @@
   </head>
   <body>
     <h1>Instaku</h1>
-    <div id="ui" ng-controller="WordCtrl">
-        <div id="single-player-instructions">
-            <label>Use the following words in your haiku:</label>
-            <ul id="mandatory-words">
-                <li ng-class="{used: word.used}" ng-repeat="word in mandatoryWords">{{word.text}}</li>
-            </ul>
-        </div>
-        <form ng-submit="enterPressed()">
-            <input on-keyup="updateCurrentSyllableCount()" only-letters type="text" ng-model="newWordText" placeholder="Type a word then hit ENTER">
-            <sup class="{{currSyllableCountClass}}">{{currSyllableCount}}</sup>
-        </form>
-        <p id="haiku">
-            <span ng-repeat="line in game.lines">
-                <span ng-repeat="word in line.words">{{word.text}}<sup title="{{word.syllables}} syllables">{{word.syllables}}</sup> </span>
-                <br>
-            </span>
-        </p>
-        <p id="message" class="{{messageLevel}}">{{message}}</p>
-        
-        <img style="display:none" id="imageKu" src="" width="300px" height="300px" />
-    </div>
+
+    <a href="single">single</a>
+    <a href="double">double</a>
+    <a href="home">home</a>
+
+    <div ng-view></div>
+
   </body>
 </html>

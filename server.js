@@ -10,6 +10,11 @@ app.configure(function(){
     app.use(express.static(path.join(__dirname, 'public')))
 })
 
+app.get(/^\/(?:|single|double|home)$/, function(req, res){
+	//res.redirect('/')
+	console.log('express_default');
+	res.sendfile(path.join(__dirname, 'public/index.html'))
+})
 
 app.listen(3000)
 console.log('Server listening on port 3000')

@@ -10,6 +10,22 @@
 /* ===========  AngularJS directives (which are sort of like extensions to the HTML elements) ======== */
 var app=angular.module('app', [])
 
+app.config(function($routeProvider, $locationProvider) {
+    $routeProvider
+      .when('/single', {controller:WordCtrl, templateUrl:'single.html'})
+      .when('/double', {controller:WordCtrl, templateUrl:'double.html'})
+      .when('/home', {controller:HomeCtrl, templateUrl:'landing.html'})
+    $locationProvider.html5Mode(true)
+    //debugger;
+});
+
+// / (landing)
+// /single
+// /double
+// /id
+
+
+
 // the only-letters directive that forces all in put to be
 // letters only
 app.directive('onlyLetters', function(){
@@ -38,6 +54,12 @@ app.directive('onKeyup', function(){
 
 
 /* ============== The meat and potatoes: the controller for the UI ================= */
+app.controller('HomeCtrl', ['$scope', HomeCtrl])
+
+function HomeCtrl($scope){
+    console.log('s');
+}
+
 app.controller('WordCtrl', ['$scope', WordCtrl])
 var makeGame = require('./game')
 var wordutils = require('./wordutils')
@@ -68,23 +90,11 @@ function WordCtrl($scope){
     }
 
     $scope.updateImgWords = function(i){
+        var keywords = wordutils.keywords( $scope.grams[ i ] );
+        // get most freq keywords
+        console.log( keywords );
+        console.log( wordutils.frequent( keywords ) );
 
-        var keywords = wordutils.keywords( $scope.grams[ i ] ),
-            freq = wordutils.frequent( keywords ),
-            first, second, third;
-
-        first = freq.shift();
-        third = freq.shift();
-        second = freq[ Math.floor( Math.random()*freq.length ) ];
-
-        $scope.mandatoryWords = [
-            { text: first[ 'key' ] }
-            , {text: second[ 'key' ] }
-            , {text: third[ 'key' ] }
-        ]
-    
-        $scope.$apply();
-        
     }
 
     $scope.processGrams = function( instas ){
@@ -100,10 +110,10 @@ function WordCtrl($scope){
         $scope.updateImg(0);
     }
 
-    $scope.instagram = new INSTAGRAM( { 
-        onComplete: $scope.processGrams, 
-        clientId: '82800ae3936348649c2c922d144cfe53', 
-        limit: 16 
+    $scope.instagram = new INSTAGRAM( {
+        onComplete: $scope.processGrams,
+        clientId: '82800ae3936348649c2c922d144cfe53',
+        limit: 16
     });
     $scope.instagram.getImages();
 
@@ -121,7 +131,7 @@ function WordCtrl($scope){
         var word = $scope.newWordText || ""
         var syllablesInWord = wordutils.countSyllables(word)
         if (syllablesInWord === 0) return
-        
+
         $scope.game.playWord(word)
         $scope.checkMandatoryWordsUsed(word)
         if ($scope.game.ended()){
