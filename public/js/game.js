@@ -36,14 +36,16 @@ function createGame(props){
         return game.lines[game.currIndex]
     }
 
-    game.playWord = function(word){
+    game.playWord = function(word, player){
         var syllablesInWord = wordutils.countSyllables(word)
         var currLine = game.currentLine()
         var syllablesInLine = countSyllablesInLine(currLine)
         if (syllablesInWord + syllablesInLine > currLine.max){
             return
         }
-        currLine.words.push({text: word, syllables: wordutils.countSyllables(word)})
+        var wordEntry = {text: word, syllables: wordutils.countSyllables(word)}
+        if (player) wordEntry.player = player
+        currLine.words.push(wordEntry)
         var syllablesInLine = countSyllablesInLine(currLine)
         if (syllablesInLine === currLine.max){
             game.currIndex++
