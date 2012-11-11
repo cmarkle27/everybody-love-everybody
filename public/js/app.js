@@ -105,6 +105,7 @@ function HomeCtrl($scope){
 
 function GameCtrl($scope){
     $scope.game = createGame()
+
     $scope.enterPressed = function(){
         if ($scope.game.ended()){
             $scope.resetTextBox()
@@ -117,6 +118,7 @@ function GameCtrl($scope){
         var syllablesInWord = wordutils.countSyllables(word)
         if (syllablesInWord === 0) return
         $scope.playWord(word)
+        $scope.updateSyllableCounts()
         $scope.checkMandatoryWordsUsed(word)
         if ($scope.game.ended()){
             $scope.endGame()
@@ -150,7 +152,13 @@ function GameCtrl($scope){
         $scope.message = message
         $scope.messageLevel = level
     }
-
+    $scope.updateSyllableCounts = function(){
+        
+        $scope.syllableCounts = $scope.game.syllableCounts()
+        console.log('syllableCounts')
+        console.log($scope.syllableCounts)
+    }
+    $scope.updateSyllableCounts()
 }
 
 

@@ -47,6 +47,14 @@ function createGame(props){
         }
     }
 
+    game.syllableCounts = function(){
+        var ret = []
+        for (var i = 0, len = game.lines.length; i < len; i++){
+            ret.push(countSyllablesInLine(game.lines[i]))
+        }
+        return ret
+    }
+
     game.currentLine = function(){
         return game.lines[game.currIndex]
     }

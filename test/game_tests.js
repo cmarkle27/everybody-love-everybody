@@ -77,6 +77,13 @@ describe('game', function(){
         })
         expect(ended).to.be.ok
     })
+    it('should give syllable counts for each line', function(){
+        expect(game.syllableCounts()).to.deep.equal([0,0,0])
+        haiku.split(' ').forEach(function(word){
+            game.playWord(word)
+        })
+        expect(game.syllableCounts()).to.deep.equal([5,7,5])
+    })
 })
 
 describe('mandatory words', function(){
