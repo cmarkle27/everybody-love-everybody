@@ -1,7 +1,18 @@
-<p>
-    Observe a picture, <br>
-    write a haiku on your own, <br>
-    or write together.
-</p>
-<a id="single-game-button" href="single">Play Alone</a>
-<a id="double-game-button" href="double">Join a game</a>
+<div ng-controller="HomeCtrl">
+    <p>
+        Observe a picture, <br>
+        write a haiku on your own, <br>
+        or write together.
+    </p>
+    <form ng-show="!playerName" ng-submit="submitName()">
+        <h2>What do you go by?</h2>
+        <input type="text" name="playerName" ng-model="tempName">
+        <button type="submit">Submit</button>
+    </form>
+    <div ng-show="playerName">
+        <p>Good to see you, {{playerName}}! Would you like to</p>
+        <a id="single-game-button" href="single">Play Alone</a>
+        or
+        <a id="double-game-button" href="double">Join a game</a>
+    </div>
+</div>

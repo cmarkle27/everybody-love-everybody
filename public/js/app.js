@@ -1,7 +1,7 @@
 /* TODO
 
-* add in 2-player mode
 * workflow for starting a game
+* image broken request
 * make the syllable indicators less noisy. maybe we don't need to show the count for every word
 * make the current syllable count for the current line visible somehow, that way they can plan
 
@@ -50,14 +50,44 @@ app.directive('onKeyup', function(){
 })
 
 
-/* ============== The meat and potatoes: the controller for the UI ================= */
-app.controller('HomeCtrl', ['$scope', HomeCtrl])
+/* ============== The meat and potatoes: the controllers for the UI ================= */
 
-function HomeCtrl($scope){
-    
+function createCookie(name,value,days) {
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime()+(days*24*60*60*1000));
+        var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
 }
 
-app.controller('WordCtrl', ['$scope', WordCtrl])
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function restorePlayerName(){
+    return readCookie('playerName')
+}
+
+function storePlayerName(name){
+    createCookie('playerName', name, 365)
+}
+
+function HomeCtrl($scope){
+    $scope.playerName = restorePlayerName()
+    $scope.submitName = function(){
+        $scope.playerName = $scope.tempName
+        storePlayerName($scope.playerName)
+    }
+}
 
 function GameCtrl($scope){
     $scope.game = createGame()
@@ -112,10 +142,8 @@ function GameCtrl($scope){
 
 
 
-function WordCtrl($scope){
+function OnePlayerGameCtrl($scope){
     GameCtrl($scope)
-
-    
     $scope.currSyllableCount = 0
     $scope.currSyllabelCountClass = 'good'
     $scope.message = ''
@@ -180,7 +208,7 @@ function WordCtrl($scope){
 
 
 function TwoPlayerGameCtrl($scope){
-    $scope.playerName = 'Dana'
+    $scope.playerName = restorePlayerName()
     GameCtrl($scope)
     $scope.newWordText = ''
     function setImage(url){
@@ -202,7 +230,6 @@ function TwoPlayerGameCtrl($scope){
     })
     socket.on('turn', function(word){
         $scope.game.playWord(word)
-        console.log('got my turn!')
         $scope.setMyTurn(true)
         $scope.$apply()
     })
