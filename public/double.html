@@ -1,5 +1,6 @@
 <div id="ui" ng-controller="TwoPlayerGameCtrl">
     <div id="two-player-instructions">
+        <h2 ng-show="opponent">{{playerName}} vs {{opponent}}</h2>
         <p ng-show="myTurn">{{playerName}}, it's your turn:</p>
     </div>
     <form ng-submit="enterPressed()">

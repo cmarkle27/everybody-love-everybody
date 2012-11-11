@@ -217,8 +217,11 @@ function TwoPlayerGameCtrl($scope){
         $scope.$apply()
     }
     var socket = io.connect('http://' + location.hostname)
-    socket.emit('joinGame')
-    socket.on('gameStart', function(url){
+    socket.emit('joinGame', $scope.playerName)
+    socket.on('gameStart', function(opponent, url){
+        console.log('opponent '  + opponent)
+        $scope.opponent = opponent
+        $scope.$apply()
         if (url){
             setImage(url)
             return
