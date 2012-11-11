@@ -12,8 +12,8 @@ var app=angular.module('app', [])
 
 app.config(function($routeProvider, $locationProvider) {
     $routeProvider
-      .when('/single', {controller:WordCtrl, templateUrl:'single.html'})
-      .when('/double', {controller:WordCtrl, templateUrl:'double.html'})
+      .when('/single', {templateUrl:'single.html'})
+      .when('/double', {templateUrl:'double.html'})
       .when('/', {controller:HomeCtrl, templateUrl:'landing.html'})
     $locationProvider.html5Mode(true)
 });
@@ -64,9 +64,8 @@ function WordCtrl($scope){
     $scope.currSyllableCount = 0
     $scope.currSyllabelCountClass = 'good'
     $scope.message = ''
-    $scope.instaImg = $("#imageKu");
     $scope.grams = [];
-    $scope.imgSrc = '';
+    $scope.imageSrc = '';
 
     $scope.updateImg = function(i){
         $scope.updateImgSrc(i);
@@ -75,15 +74,12 @@ function WordCtrl($scope){
 
     $scope.updateImgSrc = function(i){
         // jquery update of imgsrc
-        $( $scope.instaImg ).attr("src", $scope.grams[ i ].images.standard_resolution.url).show();
+        $scope.imageSrc = $scope.grams[ i ].images.standard_resolution.url
+        console.log($scope.imageSrc);
+        $scope.$apply();
     }
 
     $scope.updateImgWords = function(i){
-        var keywords = wordutils.keywords( $scope.grams[ i ] );
-        // get most freq keywords
-        //console.log( keywords );
-        //console.log( wordutils.frequent( keywords ) );
-
         var keywords = wordutils.keywords( $scope.grams[ i ] ),
             freq = wordutils.frequent( keywords ),
             first, second, third;
@@ -103,23 +99,16 @@ function WordCtrl($scope){
     }
 
     $scope.processGrams = function( instas ){
-        // save the grams
         $scope.grams = instas;
-
-        /*
-        for (var i = 0, len = instas.length ; i < len; i++) {
-            $scope.grams.push( instas[ i ].images.standard_resolution );
-        };
-        */
-
         $scope.updateImg(0);
     }
-
+    
     $scope.instagram = new INSTAGRAM( {
         onComplete: $scope.processGrams,
         clientId: '82800ae3936348649c2c922d144cfe53',
-        limit: 16
+        limit: 1
     });
+
     $scope.instagram.getImages();
 
     $scope.currentLine = function(){
@@ -175,3 +164,7 @@ function WordCtrl($scope){
         return !$scope.game.canFitWord($scope.newWordText || '')
     }
 }
+
+
+/* ================== Socket.IO integration ================== */
+var socket = io.connect('http://' + location.hostname)

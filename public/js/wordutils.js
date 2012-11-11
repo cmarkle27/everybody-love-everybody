@@ -116,3 +116,7 @@ function keywords( img ){
     //console.log( keywords.join(' ') );
     
 }
+
+if (typeof module !== 'undefined'){
+    module.exports = wordutils
+}

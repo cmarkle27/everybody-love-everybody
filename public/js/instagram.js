@@ -70,7 +70,6 @@ var INSTAGRAM = function( options ) {
   },
 
   makeRequest = function() {
-
     $.ajax({
       type: "GET",
       dataType: "jsonp",

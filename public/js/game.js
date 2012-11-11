@@ -63,9 +63,6 @@ function createGame(props){
             for (var i = 0, numLines = game.lines.length; i < numLines; i++){
                 var line = game.lines[i]
                 for (var j = 0, numWords = line.words.length; j < numWords; j++){
-                    console.log('text ' + line.words[j].text)
-                    console.log('word ' + word)
-                    
                     if (wordutils.sameWord(line.words[j].text, word.text)){
                         return true
                     }
@@ -76,4 +73,8 @@ function createGame(props){
     }
 
     return game
+}
+
+if (typeof module !== 'undefined'){
+    module.exports = createGame
 }
