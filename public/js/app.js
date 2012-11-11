@@ -14,7 +14,7 @@ app.config(function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/single', {controller:WordCtrl, templateUrl:'single.html'})
       .when('/double', {controller:WordCtrl, templateUrl:'double.html'})
-      .when('/home', {controller:HomeCtrl, templateUrl:'landing.html'})
+      .when('/', {controller:HomeCtrl, templateUrl:'landing.html'})
     $locationProvider.html5Mode(true)
     //debugger;
 });
@@ -69,12 +69,6 @@ function WordCtrl($scope){
     $scope.currSyllableCount = 0
     $scope.currSyllabelCountClass = 'good'
     $scope.message = ''
-    $scope.mandatoryWords = [
-        {text: 'princess'}
-        , {text: 'prince'}
-        , {text: 'king'}
-    ]
-
     $scope.instaImg = $("#imageKu");
     $scope.grams = [];
     $scope.imgSrc = '';
@@ -95,6 +89,22 @@ function WordCtrl($scope){
         console.log( keywords );
         console.log( wordutils.frequent( keywords ) );
 
+        var keywords = wordutils.keywords( $scope.grams[ i ] ),
+            freq = wordutils.frequent( keywords ),
+            first, second, third;
+
+        first = freq.shift();
+        third = freq.shift();
+        second = freq[ Math.floor( Math.random()*freq.length ) ];
+
+        $scope.game.mandatoryWords = [
+            { text: first[ 'key' ] }
+            , {text: second[ 'key' ] }
+            , {text: third[ 'key' ] }
+        ]
+    
+        $scope.$apply();
+        
     }
 
     $scope.processGrams = function( instas ){
@@ -146,9 +156,7 @@ function WordCtrl($scope){
                 mw.used = true
             }
         })
-        $scope.allMandatoryWordsUsed = $scope.mandatoryWords.every(function(mw){
-            return mw.used
-        })
+        $scope.allMandatoryWordsUsed = $scope.game.allMandatoryWordsUsed()
     }
     $scope.resetTextBox = function(){
         $scope.newWordText = ''
@@ -165,7 +173,7 @@ function WordCtrl($scope){
         }
     }
     $scope.updateCurrentSyllableCount = function(){
-        $scope.currSyllableCount = wordutils.countSyllables($scope.newWordText)
+        $scope.currSyllableCount = wordutils.countSyllables($scope.newWordText || '')
         $scope.currSyllableCountClass = $scope.tooManySyllables() ? 'bad' : 'good'
     }
     $scope.tooManySyllables = function(){

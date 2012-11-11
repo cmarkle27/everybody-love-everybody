@@ -11,7 +11,7 @@ there was a person some where \
 here are more words here'
 
 var princessHaiku = 'once upon a time \
-there was a princeess and she \
+there was a princess and she \
 had a prince and king'
 
 describe('game', function(){
@@ -82,6 +82,5 @@ describe('mandatory words', function(){
             game.playWord(word)
         })
         expect(game.allMandatoryWordsUsed()).to.be.ok
-        
     })
 })

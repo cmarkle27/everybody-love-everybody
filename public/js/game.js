@@ -59,7 +59,18 @@ function createGame(props){
     }
 
     game.allMandatoryWordsUsed = function(){
-        return false
+        if (!game.mandatoryWords) return true
+        return game.mandatoryWords.every(function(word){
+            for (var i = 0, numLines = game.lines.length; i < numLines; i++){
+                var line = game.lines[i]
+                for (var j = 0, numWords = line.words.length; j < numWords; j++){
+                    if (wordutils.sameWord(line.words[j].text, word)){
+                        return true
+                    }
+                }
+            }
+            return false
+        })
     }
 
     return game

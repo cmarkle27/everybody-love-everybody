@@ -10,9 +10,7 @@ app.configure(function(){
     app.use(express.static(path.join(__dirname, 'public')))
 })
 
-app.get(/^\/(?:|single|double|home)$/, function(req, res){
-	//res.redirect('/')
-	console.log('express_default');
+app.get(/^\/(?:|single|double)$/, function(req, res){
 	res.sendfile(path.join(__dirname, 'public/index.html'))
 })
 
