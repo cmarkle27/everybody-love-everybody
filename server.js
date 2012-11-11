@@ -19,5 +19,7 @@ app.get(/^\/(?:|single|double)$/, function(req, res){
 
 gameCoordinator.start(io)
 
-server.listen(3000)
-console.log('Server listening on port 3000')
+
+var port = process.env.NODE_ENV === 'production' ? 80 : 3000
+server.listen(port)
+console.log('Server listening on port ' + port)
