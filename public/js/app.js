@@ -161,7 +161,6 @@ function OnePlayerGameCtrl($scope){
     $scope.updateImgSrc = function(i){
         // jquery update of imgsrc
         $scope.imageSrc = $scope.grams[ i ].images.standard_resolution.url
-        console.log($scope.imageSrc);
         $scope.$apply();
     }
 
@@ -220,22 +219,30 @@ function TwoPlayerGameCtrl($scope){
     var socket = io.connect('http://' + location.hostname)
     socket.emit('joinGame', $scope.playerName)
     socket.on('gameStart', function(opponent, url){
-        console.log('opponent '  + opponent)
         $scope.opponent = opponent
         $scope.gameStarted = true
-        $scope.$apply()
+        
         if (url){
             setImage(url)
-            return
+            $scope.game.player1 = opponent
+            $scope.game.player2 = $scope.playerName
+            $scope.whichAmI = 2
+            $scope.whichAreThey = 1
+        }else{
+            $scope.game.player1 = $scope.playerName
+            $scope.game.player2 = opponent
+            $scope.whichAmI = 1
+            $scope.whichAreThey = 2
+            new INSTAGRAM( {
+                onComplete: $scope.gotImage,
+                limit: 1
+            }).getImages()
         }
-        
-        new INSTAGRAM( {
-            onComplete: $scope.gotImage,
-            limit: 1
-        }).getImages()
+
+        $scope.$apply()
     })
     socket.on('turn', function(word){
-        $scope.game.playWord(word)
+        $scope.game.playWord(word, $scope.opponent)
         $scope.setMyTurn(true)
         $scope.$apply()
     })
@@ -253,7 +260,7 @@ function TwoPlayerGameCtrl($scope){
         socket.emit('gameImage', $scope.imageSrc)
     }
     $scope.playWord = function(word){
-        $scope.game.playWord(word)
+        $scope.game.playWord(word, $scope.playerName)
         socket.emit('playWord', word)
         $scope.setMyTurn(false)
     }

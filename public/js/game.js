@@ -44,7 +44,11 @@ function createGame(props){
             return
         }
         var wordEntry = {text: word, syllables: wordutils.countSyllables(word)}
-        if (player) wordEntry.player = player
+        if (player){
+            wordEntry.player = player
+            if (player === game.player1) wordEntry.which = 1
+            if (player === game.player2) wordEntry.which = 2
+        }
         currLine.words.push(wordEntry)
         var syllablesInLine = countSyllablesInLine(currLine)
         if (syllablesInLine === currLine.max){

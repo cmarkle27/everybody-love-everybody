@@ -88,11 +88,17 @@ describe('mandatory words', function(){
 describe('two player game', function(){
     var game
     beforeEach(function(){
-        game = createGame()
+        game = createGame({
+            player1: 'Don',
+            player2: 'John'
+        })
     })
     it('should save playerName with word if provided', function(){
         game.playWord('car', 'Don')
         expect(game.currentLine().words[0].text).to.equal('car')
         expect(game.currentLine().words[0].player).to.equal('Don')
+        expect(game.currentLine().words[0].which).to.equal(1)
+        game.playWord('board', 'John')
+        expect(game.currentLine().words[1].which).to.equal(2)
     })
 })
