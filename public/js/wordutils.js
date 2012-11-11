@@ -1,6 +1,7 @@
 // <http://stackoverflow.com/questions/5686483/how-to-compute-number-of-syllables-in-a-word-in-javascript>
+var wordutils = {}
 
-exports.countSyllables = countSyllables
+wordutils.countSyllables = countSyllables
 function countSyllables(word) {
     word = word.toLowerCase();
     if(word.length <= 3) {
@@ -12,13 +13,13 @@ function countSyllables(word) {
     return word.match(/[aeiouy]{1,2}/g).length
 }
 
-exports.capitalize = capitalize
+wordutils.capitalize = capitalize
 function capitalize(word){
     if (word.length === 0) return word
     return word.substring(0, 1).toUpperCase() + word.substring(1)
 }
 
-exports.sameWord = sameWord
+wordutils.sameWord = sameWord
 function sameWord(one, other){
     return one.toLowerCase() === other.toLowerCase()
 }
@@ -28,7 +29,6 @@ function replaceURLWithHTMLLinks(text) {
     return text.replace(exp,"<a href='$1'>$1</a>"); 
 }
 
-exports.uncommon = uncommon
 function uncommon( sentence ){
 
     // a, an, by, to, me, he, we, it, i, to, of, be, is
@@ -75,7 +75,7 @@ function sortObject(obj) {
     return arr; // returns array
 }
 
-exports.frequent = frequent
+wordutils.frequent = frequent
 function frequent( words ){
 
     var wordCounts = { };
@@ -88,7 +88,7 @@ function frequent( words ){
     return sortObject( wordCounts );
 }
 
-exports.keywords = keywords
+wordutils.keywords = keywords
 function keywords( img ){
 
     var str = '' 

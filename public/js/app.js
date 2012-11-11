@@ -54,15 +54,13 @@ app.directive('onKeyup', function(){
 app.controller('HomeCtrl', ['$scope', HomeCtrl])
 
 function HomeCtrl($scope){
-    console.log('s');
+    
 }
 
 app.controller('WordCtrl', ['$scope', WordCtrl])
-var makeGame = require('./game')
-var wordutils = require('./wordutils')
 
 function WordCtrl($scope){
-    $scope.game = makeGame()
+    $scope.game = createGame()
     $scope.currSyllableCount = 0
     $scope.currSyllabelCountClass = 'good'
     $scope.message = ''
@@ -148,7 +146,7 @@ function WordCtrl($scope){
     }
 
     $scope.checkMandatoryWordsUsed = function(word){
-        $scope.mandatoryWords.filter(function(mw){
+        $scope.game.mandatoryWords.forEach(function(mw){
             if (wordutils.sameWord(mw.text, word)){
                 mw.used = true
             }

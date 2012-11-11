@@ -1,4 +1,3 @@
-var wordutils = require('./wordutils')
 
 function countSyllablesInLine(line){
     var words = line.words
@@ -64,7 +63,10 @@ function createGame(props){
             for (var i = 0, numLines = game.lines.length; i < numLines; i++){
                 var line = game.lines[i]
                 for (var j = 0, numWords = line.words.length; j < numWords; j++){
-                    if (wordutils.sameWord(line.words[j].text, word)){
+                    console.log('text ' + line.words[j].text)
+                    console.log('word ' + word)
+                    
+                    if (wordutils.sameWord(line.words[j].text, word.text)){
                         return true
                     }
                 }
@@ -75,5 +77,3 @@ function createGame(props){
 
     return game
 }
-
-module.exports = createGame
