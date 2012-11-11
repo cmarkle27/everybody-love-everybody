@@ -17,7 +17,7 @@ var INSTAGRAM = function( options ) {
           , locationId: null
           , search: null
           , accessToken: null
-          , clientId: null
+          , clientId: '82800ae3936348649c2c922d144cfe53'
           , limit: null
           , onComplete: null
           , maxId: null

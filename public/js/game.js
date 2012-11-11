@@ -1,3 +1,7 @@
+if (typeof require !== 'undefined'){
+    var wordutils = require('./wordutils')
+}
+
 
 function countSyllablesInLine(line){
     var words = line.words

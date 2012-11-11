@@ -59,8 +59,63 @@ function HomeCtrl($scope){
 
 app.controller('WordCtrl', ['$scope', WordCtrl])
 
-function WordCtrl($scope){
+function GameCtrl($scope){
     $scope.game = createGame()
+    $scope.enterPressed = function(){
+        if ($scope.game.ended()){
+            $scope.resetTextBox()
+            return
+        }
+        if ($scope.tooManySyllables()){
+            return
+        }
+        var word = $scope.newWordText || ""
+        var syllablesInWord = wordutils.countSyllables(word)
+        if (syllablesInWord === 0) return
+        $scope.playWord(word)
+        $scope.checkMandatoryWordsUsed(word)
+        if ($scope.game.ended()){
+            $scope.endGame()
+        }
+        $scope.resetTextBox()
+    }
+    $scope.checkMandatoryWordsUsed = function(word){
+        if (!$scope.game.mandatoryWords) return
+        $scope.game.mandatoryWords.forEach(function(mw){
+            if (wordutils.sameWord(mw.text, word)){
+                mw.used = true
+            }
+        })
+        $scope.allMandatoryWordsUsed = $scope.game.allMandatoryWordsUsed()
+    }
+
+    $scope.tooManySyllables = function(){
+        return !$scope.game.canFitWord($scope.newWordText || '')
+    }
+    $scope.updateCurrentSyllableCount = function(){
+        $scope.currSyllableCount = wordutils.countSyllables($scope.newWordText || '')
+        $scope.currSyllableCountClass = $scope.tooManySyllables() ? 'bad' : 'good'
+    }
+    $scope.resetTextBox = function(){
+        $scope.newWordText = ''
+    }
+    $scope.currentLine = function(){
+        return $scope.game.currentLine()
+    }
+    $scope.setMessage = function(level, message){
+        $scope.message = message
+        $scope.messageLevel = level
+    }
+
+}
+
+
+
+
+function WordCtrl($scope){
+    GameCtrl($scope)
+
+    
     $scope.currSyllableCount = 0
     $scope.currSyllabelCountClass = 'good'
     $scope.message = ''
@@ -71,7 +126,9 @@ function WordCtrl($scope){
         $scope.updateImgSrc(i);
         $scope.updateImgWords(i);
     }
-
+    $scope.playWord = function(word){
+        $scope.game.playWord(word)
+    }
     $scope.updateImgSrc = function(i){
         // jquery update of imgsrc
         $scope.imageSrc = $scope.grams[ i ].images.standard_resolution.url
@@ -105,50 +162,11 @@ function WordCtrl($scope){
     
     $scope.instagram = new INSTAGRAM( {
         onComplete: $scope.processGrams,
-        clientId: '82800ae3936348649c2c922d144cfe53',
         limit: 1
     });
 
     $scope.instagram.getImages();
-
-    $scope.currentLine = function(){
-        return $scope.game.currentLine()
-    }
-    $scope.enterPressed = function(){
-        if ($scope.game.ended()){
-            $scope.resetTextBox()
-            return
-        }
-        if ($scope.tooManySyllables()){
-            return
-        }
-        var word = $scope.newWordText || ""
-        var syllablesInWord = wordutils.countSyllables(word)
-        if (syllablesInWord === 0) return
-
-        $scope.game.playWord(word)
-        $scope.checkMandatoryWordsUsed(word)
-        if ($scope.game.ended()){
-            $scope.endGame()
-        }
-        $scope.resetTextBox()
-    }
-
-    $scope.checkMandatoryWordsUsed = function(word){
-        $scope.game.mandatoryWords.forEach(function(mw){
-            if (wordutils.sameWord(mw.text, word)){
-                mw.used = true
-            }
-        })
-        $scope.allMandatoryWordsUsed = $scope.game.allMandatoryWordsUsed()
-    }
-    $scope.resetTextBox = function(){
-        $scope.newWordText = ''
-    }
-    $scope.setMessage = function(level, message){
-        $scope.message = message
-        $scope.messageLevel = level
-    }
+        
     $scope.endGame = function(){
         if (!$scope.allMandatoryWordsUsed){
             $scope.setMessage('error', "Sorry, you didn't use all the required words")
@@ -156,15 +174,57 @@ function WordCtrl($scope){
             $scope.setMessage('info', 'Nice haiku!')
         }
     }
-    $scope.updateCurrentSyllableCount = function(){
-        $scope.currSyllableCount = wordutils.countSyllables($scope.newWordText || '')
-        $scope.currSyllableCountClass = $scope.tooManySyllables() ? 'bad' : 'good'
-    }
-    $scope.tooManySyllables = function(){
-        return !$scope.game.canFitWord($scope.newWordText || '')
-    }
+    
+    
 }
 
 
-/* ================== Socket.IO integration ================== */
-var socket = io.connect('http://' + location.hostname)
+function TwoPlayerGameCtrl($scope){
+    $scope.playerName = 'Dana'
+    GameCtrl($scope)
+    $scope.newWordText = ''
+    function setImage(url){
+        $scope.imageSrc = url
+        $scope.$apply()
+    }
+    var socket = io.connect('http://' + location.hostname)
+    socket.emit('joinGame')
+    socket.on('gameStart', function(url){
+        if (url){
+            setImage(url)
+            return
+        }
+        console.log('game started')
+        new INSTAGRAM( {
+            onComplete: $scope.gotImage,
+            limit: 1
+        }).getImages()
+    })
+    socket.on('turn', function(word){
+        $scope.game.playWord(word)
+        console.log('got my turn!')
+        $scope.setMyTurn(true)
+        $scope.$apply()
+    })
+    $scope.setMyTurn = function(yes){
+        $scope.myTurn = yes
+        $scope.inputDisabled = !yes
+    }
+    $scope.setMyTurn(false)
+    $scope.gotImage = function(grams){
+        $scope.inputDisabled = false
+        $scope.myTurn = true
+        // Got image
+        setImage(grams[0].images.standard_resolution.url)
+        // Now send the image back to the other player
+        socket.emit('gameImage', $scope.imageSrc)
+    }
+    $scope.playWord = function(word){
+        $scope.game.playWord(word)
+        socket.emit('playWord', word)
+        $scope.setMyTurn(false)
+    }
+    $scope.endGame = function(){
+        $scope.setMessage('info', 'Nice haiku, folks!')
+    }
+}
