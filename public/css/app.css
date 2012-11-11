@@ -33,6 +33,17 @@ body {
 #ui {
   font-size: 25px;
 }
+.line {
+  line-height: 1.4;
+}
+.line-counts span {
+  background-color: #ccc;
+  padding: 10px 12px;
+  display: inline-block;
+  border-radius: 22px;
+  margin: 4px;
+  color: #fff;
+}
 sup {
   color: #777;
   cursor: default;

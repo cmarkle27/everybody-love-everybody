@@ -10,11 +10,15 @@
         <sup class="{{currSyllableCountClass}}">{{currSyllableCount}}</sup>
     </form>
     <p id="haiku">
-        <span ng-repeat="line in game.lines">
-            <span ng-repeat="word in line.words">{{word.text}}<sup title="{{word.syllables}} syllables">{{word.syllables}}</sup> </span>
+        <span ng-repeat="line in game.lines" class="line">
+            <span ng-repeat="word in line.words">{{word.text}} </span>
             <br>
         </span>
     </p>
+    <div class="line-counts">
+        <span>5</span><span>7</span><span>5</span>
+    </div>
+
     <p id="message" class="{{messageLevel}}">{{message}}</p>
 
     <img id="imageKu" ng-src="{{imageSrc}}" width="300px" height="300px" />
