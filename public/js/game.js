@@ -24,6 +24,8 @@ function createGame(props){
 
     augment(game, props)
 
+    game.listeners = {}
+
     game.currIndex = 0
     
     game.lines = [
@@ -31,6 +33,19 @@ function createGame(props){
         , {max: 7, words: []}
         , {max: 5, words: []}
     ]
+
+    game.on = function(evt, cb){
+        var cbs = game.listeners[evt] || (game.listeners[evt] = [])
+        cbs.push(cb)
+    }
+
+    game.emit = function(evt){
+        var cbs = game.listeners[evt]
+        if (!cbs) return
+        for (var i = 0, len = cbs.length; i < len; i++){
+            cbs[i]()
+        }
+    }
 
     game.currentLine = function(){
         return game.lines[game.currIndex]
@@ -53,6 +68,9 @@ function createGame(props){
         var syllablesInLine = countSyllablesInLine(currLine)
         if (syllablesInLine === currLine.max){
             game.currIndex++
+        }
+        if (game.ended()){
+            game.emit('ended')
         }
     }
 

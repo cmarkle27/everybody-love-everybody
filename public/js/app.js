@@ -241,6 +241,7 @@ function TwoPlayerGameCtrl($scope){
 
         $scope.$apply()
     })
+
     socket.on('turn', function(word){
         $scope.game.playWord(word, $scope.opponent)
         $scope.setMyTurn(true)
@@ -267,4 +268,7 @@ function TwoPlayerGameCtrl($scope){
     $scope.endGame = function(){
         $scope.setMessage('info', 'Nice haiku, folks!')
     }
+    socket.on('gameEnded', function(){
+        $scope.setMessage('info', 'Nice haiku, folks!')
+    })
 }

@@ -51,3 +51,6 @@ ul#mandatory-words li.unused {
 .player2-word {
   color: #008000;
 }
+#two-player-instructions h2 {
+  color: #808080;
+}

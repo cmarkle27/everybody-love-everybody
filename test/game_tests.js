@@ -67,6 +67,16 @@ describe('game', function(){
         })
         game.canFitWord('bobby')
     })
+    it('fires game ended', function(){
+        var ended = false
+        game.on('ended', function(){
+            ended = true
+        })
+        haiku.split(' ').forEach(function(word){
+            game.playWord(word)
+        })
+        expect(ended).to.be.ok
+    })
 })
 
 describe('mandatory words', function(){
