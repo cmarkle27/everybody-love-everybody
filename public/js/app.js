@@ -51,6 +51,9 @@ app.directive('onKeyup', function(){
 })
 
 
+/* ============== global socket ===================================================== */
+var socket = io.connect('http://' + location.hostname)
+
 /* ============== The meat and potatoes: the controllers for the UI ================= */
 
 function createCookie(name,value,days) {
@@ -80,6 +83,16 @@ function restorePlayerName(){
 
 function storePlayerName(name){
     createCookie('playerName', name, 365)
+}
+
+function TopLevelCtrl($scope){
+    $scope.playersConnected = null
+    socket.emit('getPlayerConnectedCount')
+    socket.on('playerConnectedCount', function(count){
+        console.log('playerConnectedCount ' + count)
+        $scope.playersConnected = count
+        $scope.$apply()
+    })
 }
 
 function HomeCtrl($scope){
@@ -216,7 +229,6 @@ function TwoPlayerGameCtrl($scope){
         $scope.imageSrc = url
         $scope.$apply()
     }
-    var socket = io.connect('http://' + location.hostname)
     socket.emit('joinGame', $scope.playerName)
     socket.on('gameStart', function(opponent, url){
         $scope.opponent = opponent
@@ -269,6 +281,6 @@ function TwoPlayerGameCtrl($scope){
         $scope.setMessage('info', 'Nice haiku, folks!')
     }
     socket.on('gameEnded', function(){
-        $scope.setMessage('info', 'Nice haiku, folks!')
+        $scope.endGame()
     })
 }

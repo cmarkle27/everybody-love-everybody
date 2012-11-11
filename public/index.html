@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="app">
+<html ng-app="app" ng-controller="TopLevelCtrl">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -16,7 +16,7 @@
   </head>
   <body>
 
-    <div class="player-count"><span>11</span> players connected</div>
+    <div class="player-count" ng-show="playersConnected"><span>{{playersConnected}}</span> players connected</div>
 
 
     <div class="row">

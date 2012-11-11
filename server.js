@@ -17,6 +17,22 @@ app.get(/^\/(?:|single|double)$/, function(req, res){
 	res.sendfile(path.join(__dirname, 'public/index.html'))
 })
 
+function getConnectedClients(){
+    return io.sockets.clients().length
+}
+
+io.sockets.on('connection', function(socket){
+    socket.broadcast.emit('playerConnectedCount', getConnectedClients())
+    socket.on('getPlayerConnectedCount', function(){
+        socket.emit('playerConnectedCount', getConnectedClients())
+    })
+    socket.on('disconnect', function(){
+        process.nextTick(function(){
+            socket.broadcast.emit('playerConnectedCount', getConnectedClients())
+        })
+    })
+})
+
 gameCoordinator.start(io)
 
 
