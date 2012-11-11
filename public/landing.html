@@ -2,11 +2,14 @@
     <form ng-show="!playerName" ng-submit="submitName()">
         <h2>What do you go by?</h2>
 
+
+
         <input type="text" name="playerName" ng-model="tempName">
-        <button type="submit">Submit</button>
+        <button type="submit" class="btn submit">Submit</button>
     </form>
     <div ng-show="playerName">
-        <p>Good to see you, {{playerName}}! Would you like to</p>
+        <h2>Good to see you, {{playerName}}!</h2>
+        <p>Would you like to</p>
         <a href="single" class="btn btn-large" type="button">Play Alone</a>
         &nbsp;&nbsp;or&nbsp;&nbsp;
         <a href="double" class="btn btn-large" type="button">Join a game</a>
