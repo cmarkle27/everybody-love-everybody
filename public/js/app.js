@@ -210,6 +210,7 @@ function OnePlayerGameCtrl($scope){
 
 function TwoPlayerGameCtrl($scope){
     $scope.playerName = restorePlayerName()
+    $scope.gameStarted = false
     GameCtrl($scope)
     $scope.newWordText = ''
     function setImage(url){
@@ -221,12 +222,13 @@ function TwoPlayerGameCtrl($scope){
     socket.on('gameStart', function(opponent, url){
         console.log('opponent '  + opponent)
         $scope.opponent = opponent
+        $scope.gameStarted = true
         $scope.$apply()
         if (url){
             setImage(url)
             return
         }
-        console.log('game started')
+        
         new INSTAGRAM( {
             onComplete: $scope.gotImage,
             limit: 1
