@@ -3,10 +3,11 @@
         <div id="two-player-instructions">
             <h2 ng-show="opponent">
                 <span class="player{{whichAmI}}">{{playerName}}</span>
-                <i class="icon-arrow-left"></i> vs <i class="icon-arrow-right waiting"></i>
+                <i ng-show="myTurn" class="icon-arrow-left"></i> 
+                vs 
+                <i ng-hide="myTurn" class="icon-arrow-right"></i>
                 <span class="player{{whichAreThey}}">{{opponent}}</span>
             </h2>
-            <p ng-show="myTurn" class="player{{whichAmI}}">{{playerName}}, it's your turn:</p>
         </div>
         <form ng-submit="enterPressed()">
             <input ng-disabled="inputDisabled" on-keyup="updateCurrentSyllableCount()" only-letters type="text" ng-model="newWordText" placeholder="Type a word then hit ENTER">
