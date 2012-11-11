@@ -16,15 +16,12 @@ app.config(function($routeProvider, $locationProvider) {
       .when('/double', {controller:WordCtrl, templateUrl:'double.html'})
       .when('/', {controller:HomeCtrl, templateUrl:'landing.html'})
     $locationProvider.html5Mode(true)
-    //debugger;
 });
 
 // / (landing)
 // /single
 // /double
-// /id
-
-
+// /
 
 // the only-letters directive that forces all in put to be
 // letters only
@@ -86,8 +83,8 @@ function WordCtrl($scope){
     $scope.updateImgWords = function(i){
         var keywords = wordutils.keywords( $scope.grams[ i ] );
         // get most freq keywords
-        console.log( keywords );
-        console.log( wordutils.frequent( keywords ) );
+        //console.log( keywords );
+        //console.log( wordutils.frequent( keywords ) );
 
         var keywords = wordutils.keywords( $scope.grams[ i ] ),
             freq = wordutils.frequent( keywords ),

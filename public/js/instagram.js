@@ -92,7 +92,7 @@ var INSTAGRAM = function( options ) {
           grams.push( res.data[i] );
         }
 
-        console.log(grams);
+        //console.log(grams);
 
         settings.onComplete != null && typeof settings.onComplete == 'function' && settings.onComplete(grams, res);
 

@@ -108,7 +108,7 @@ function keywords( img ){
     str = words.join(' ').replace(exp,''); 
     str = str.replace(/ +/g, ' ');
 
-    console.log( str );
+    //console.log( str );
 
     // remove common words
     return uncommon( str );
