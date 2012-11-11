@@ -1,7 +1,8 @@
 /* TODO
 
-* workflow for starting a game
-* image broken request
+* flesh out ending a game for 2 player
+* saving finished games
+* improve UI
 * make the syllable indicators less noisy. maybe we don't need to show the count for every word
 * make the current syllable count for the current line visible somehow, that way they can plan
 
