@@ -2,8 +2,8 @@
     <div ng-show="gameStarted">
         <div id="two-player-instructions">
             <h2 ng-show="opponent">
-                <span class="player{{whichAmI}}">{{playerName}}</span> 
-                    vs 
+                <span class="player{{whichAmI}}">{{playerName}}</span>
+                <i class="icon-arrow-left"></i> vs <i class="icon-arrow-right waiting"></i>
                 <span class="player{{whichAreThey}}">{{opponent}}</span>
             </h2>
             <p ng-show="myTurn" class="player{{whichAmI}}">{{playerName}}, it's your turn:</p>
@@ -24,6 +24,7 @@
         <img id="imageKu" ng-src="{{imageSrc}}" width="300px" height="300px" />
     </div>
     <div ng-hide="gameStarted">
-        <p>Waiting for another player...</p>
+        <h2>Waiting for another player...</h2>
+
     </div>
 </div>
